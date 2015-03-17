@@ -1,3 +1,5 @@
+//A very small library to score strings as fullname. Given a list of strings the
+//library  returns which is the most accurate Fullname.
 package fullname
 
 import (
@@ -7,6 +9,10 @@ import (
 	"github.com/asaskevich/govalidator"
 )
 
+//GetBestFullName returns the best fullname that can be found on the list of
+//strings. Its gives priority to strings with correct capitalize names, only
+//letters strings, longer strings and strings with more than two words and less
+//than four.
 func GetBestFullName(names []string) string {
 	var higher float64
 	var best string
@@ -20,6 +26,7 @@ func GetBestFullName(names []string) string {
 	return best
 }
 
+//ScoreFullNames returns a map with the strings and his score, higher is better
 func ScoreFullNames(names []string) map[string]float64 {
 	r := make(map[string]float64, 0)
 	for _, name := range names {
