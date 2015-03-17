@@ -1,0 +1,112 @@
+package fullname
+
+import (
+	"strings"
+	"unicode"
+
+	"github.com/asaskevich/govalidator"
+)
+
+func GetBestFullName(names []string) string {
+	var higher float64
+	var best string
+	for name, score := range ScoreFullNames(names) {
+		if score > higher {
+			higher = score
+			best = name
+		}
+	}
+
+	return best
+}
+
+func ScoreFullNames(names []string) map[string]float64 {
+	r := make(map[string]float64, 0)
+	for _, name := range names {
+		name = clean(name)
+		r[name] = scoreFullname(name)
+	}
+
+	return r
+}
+
+func scoreFullname(s string) (score float64) {
+	if !isFullname(s) {
+		score = -1
+		return
+	}
+
+	if !isSingleWord(s) && hasLessWordsThan(s, 4) {
+		score += 1
+	}
+
+	if isLowerCase(s) {
+		score -= .1
+	}
+
+	if isOnlyLetters(s) {
+		score += 1
+	}
+
+	if isUpCaseInitial(s) {
+		score += 1
+	}
+
+	score += float64(len(s)) / 100
+
+	return
+}
+
+func isFullname(s string) bool {
+	return !isEmail(s) && !isEmpty(s)
+}
+
+func isOnlyLetters(s string) bool {
+	woSpaces := strings.Replace(s, " ", "", -1)
+	return govalidator.IsUTFLetter(woSpaces)
+}
+
+func isSingleWord(s string) bool {
+	return len(strings.Split(s, " ")) == 1
+}
+
+func hasLessWordsThan(s string, n int) bool {
+	return len(strings.Split(s, " ")) < n
+}
+
+func isEmail(s string) bool {
+	return govalidator.IsEmail(s)
+}
+
+func isLowerCase(s string) bool {
+	return govalidator.IsLowerCase(s)
+}
+
+func isEmpty(s string) bool {
+	return len(s) == 0
+}
+
+func isUpCaseInitial(s string) bool {
+	return s == upcaseInitialAllWords(strings.ToLower(s))
+}
+
+func upcaseInitialAllWords(s string) string {
+	words := strings.Split(s, " ")
+	for i, w := range words {
+		words[i] = upcaseInitial(w)
+	}
+
+	return strings.Join(words, " ")
+}
+
+func upcaseInitial(str string) string {
+	for i, v := range str {
+		return string(unicode.ToUpper(v)) + str[i+1:]
+	}
+
+	return ""
+}
+
+func clean(s string) string {
+	return govalidator.Trim(s, "")
+}
