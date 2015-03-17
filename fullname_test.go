@@ -1,4 +1,4 @@
-package fullname
+package personal
 
 import (
 	"testing"
@@ -8,11 +8,11 @@ import (
 
 func Test(t *testing.T) { TestingT(t) }
 
-type FullNameSuite struct{}
+type PersonalSuite struct{}
 
-var _ = Suite(&FullNameSuite{})
+var _ = Suite(&PersonalSuite{})
 
-var provider = map[string][]string{
+var fullNameProvider = map[string][]string{
 	"Máximo Cuadros Ortiz": []string{"mcuadros", "Máximo Cuadros", "Máximo Cuadros Ortiz"},
 	"Foo Bar":              []string{"foo", "foo bar", "foo ba", "Foo Bar"},
 	"Foo Bar Qux":          []string{"Foo Bar Qux", "Foo Bar"},
@@ -27,8 +27,8 @@ var provider = map[string][]string{
 	"Bar Foo":              []string{"Bar Foo", "B�r Foo"},
 }
 
-func (s *FullNameSuite) TestGetBestFullName(c *C) {
-	for best, names := range provider {
+func (s *PersonalSuite) TestGetBestFullName(c *C) {
+	for best, names := range fullNameProvider {
 		c.Assert(best, Equals, GetBestFullName(names))
 	}
 }
