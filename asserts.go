@@ -57,6 +57,14 @@ func upcaseInitial(str string) string {
 	return ""
 }
 
+func removeDots(str string) string {
+	return strings.Replace(str, ".", "", -1)
+}
+
+func splitWords(str string) []string {
+	return strings.Split(str, " ")
+}
+
 var preferredDomains = map[string]interface{}{"gmail.com": nil}
 
 func isPreferredDomain(email string) bool {

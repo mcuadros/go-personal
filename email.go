@@ -1,5 +1,3 @@
-//A very small library to score strings as fullname. Given a list of strings the
-//library  returns which is the most accurate Fullname.
 package personal
 
 //GetBestFullName returns the best email that can be found on the list of
