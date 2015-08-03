@@ -42,7 +42,7 @@ func scoreFullname(s string) (score float64) {
 		score -= .1
 	}
 
-	if isOnlyLetters(s) {
+	if isOnlyValidChars(s) {
 		score += 1
 	}
 

@@ -11,9 +11,11 @@ func isFullname(s string) bool {
 	return !isEmail(s) && !isEmpty(s)
 }
 
-func isOnlyLetters(s string) bool {
-	woSpaces := strings.Replace(s, " ", "", -1)
-	return govalidator.IsUTFLetter(woSpaces)
+func isOnlyValidChars(s string) bool {
+	s = strings.Replace(s, " ", "", -1)
+	s = strings.Replace(s, "-", "", -1)
+
+	return govalidator.IsUTFLetter(s)
 }
 
 func isSingleWord(s string) bool {

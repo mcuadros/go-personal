@@ -25,6 +25,7 @@ var fullNameProvider = map[string][]string{
 	"Bär Foo":              []string{"Bär Foo", "Bar Foo"},
 	"Bár Foo":              []string{"Bár Foo", "B�r Foo"},
 	"Bar Foo":              []string{"Bar Foo", "B�r Foo"},
+	"Foo Garcia-Castro":    []string{"Foo", "Foo Garcia-Castro"},
 }
 
 func (s *PersonalSuite) TestGetBestFullName(c *C) {
