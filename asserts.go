@@ -18,6 +18,16 @@ func isOnlyValidChars(s string) bool {
 	return govalidator.IsUTFLetter(s)
 }
 
+func containsNumbers(s string) bool {
+	for i := 0; i < len(s); i++ {
+		if s[i] >= '0' && s[i] <= '9' {
+			return true
+		}
+	}
+
+	return false
+}
+
 func isSingleWord(s string) bool {
 	return len(strings.Split(s, " ")) == 1
 }

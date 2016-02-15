@@ -34,6 +34,11 @@ func scoreFullname(s string) (score float64) {
 		return
 	}
 
+	if containsNumbers(s) {
+		score = -1
+		return
+	}
+
 	if !isSingleWord(s) && hasLessWordsThan(s, 4) {
 		score += 1
 	}
