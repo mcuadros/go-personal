@@ -22,25 +22,24 @@ func ScoreEmails(emails []string) map[string]float64 {
 	r := make(map[string]float64, 0)
 	for _, email := range emails {
 		email = clean(email)
-		r[email] = scoreEmail(email)
+		r[email] = ScoreEmail(email)
 	}
 
 	return r
 }
 
-func scoreEmail(s string) (score float64) {
-	if !isEmail(s) || !isValidTLD(s) {
+//ScoreEmail returns the score for a given email, higher is better.
+func ScoreEmail(email string) (score float64) {
+	if !isEmail(email) || !isValidTLD(email) {
 		score = -1
 		return
 	}
 
-	if isPrimaryDomain(s) {
+	if isPrimaryDomain(email) {
 		score += 1
 	}
 
-	if isPreferredDomain(s) {
-		score += 1
-	}
+	score += getPreferredDomainScore(email)
 
 	return
 }

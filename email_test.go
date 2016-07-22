@@ -8,7 +8,9 @@ var emailProvider = map[string][]string{
 	"foo@bar.com": []string{"foo@bar.com", "foo"},
 
 	//We prefer some domains againsts others
-	"foo@gmail.com": []string{"foo@bar.com", "foo@gmail.com"},
+	"foo@gmail.com":  []string{"foo@bar.com", "foo@gmail.com"},
+	"foo2@gmail.com": []string{"foo@live.com", "foo2@gmail.com"},
+	"foo@live.com":   []string{"foo@bar.com", "foo@live.com"},
 
 	//Local domains
 	"foo@baz.com": []string{"foo@bar.(none)", "foo@baz.com"},
@@ -23,6 +25,6 @@ var emailProvider = map[string][]string{
 
 func (s *PersonalSuite) TestGetBestEmail(c *C) {
 	for best, names := range emailProvider {
-		c.Assert(best, Equals, GetBestEmail(names))
+		c.Assert(GetBestEmail(names), Equals, best)
 	}
 }

@@ -77,13 +77,24 @@ func splitWords(str string) []string {
 	return strings.Split(str, " ")
 }
 
-var preferredDomains = map[string]interface{}{"gmail.com": nil}
+var preferredDomains = map[string]float64{
+	"gmail.com":                2,
+	"me.com":                   1,
+	"live.com":                 1,
+	"outlook.com":              1,
+	"mail.ru":                  1,
+	"qq.com":                   1,
+	"hotmail.com":              -1,
+	"users.noreply.github.com": -1,
+}
 
-func isPreferredDomain(email string) bool {
+func getPreferredDomainScore(email string) float64 {
 	domain := getDomainFromEmail(email)
-	_, preferred := preferredDomains[domain]
-
-	return preferred
+	score, preferred := preferredDomains[domain]
+	if !preferred {
+		return 0
+	}
+	return score
 }
 
 func isPrimaryDomain(email string) bool {
