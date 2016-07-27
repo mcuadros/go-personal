@@ -5,17 +5,19 @@ import (
 	"unicode"
 
 	"github.com/asaskevich/govalidator"
+	"regexp"
 )
 
-func isFullname(s string) bool {
+func isFullNameCandidate(s string) bool {
 	return !isEmail(s) && !isEmpty(s)
 }
 
-func isOnlyValidChars(s string) bool {
-	s = strings.Replace(s, " ", "", -1)
-	s = strings.Replace(s, "-", "", -1)
+// Matches valid full names in a lax way
+// (e.g. not considering capitalization).
+var fullNameRegex, _ = regexp.Compile("^\\pL+?(\\s+(\\pL{1,2}\\.|\\pL+(-\\pL+)?))*(\\s[IV]+)?$")
 
-	return govalidator.IsUTFLetter(s)
+func isWellFormedFullName(s string) bool {
+	return fullNameRegex.MatchString(s)
 }
 
 var titlePrefixes = map[string]interface{}{
@@ -38,12 +40,8 @@ func containsNumbers(s string) bool {
 	return false
 }
 
-func isSingleWord(s string) bool {
-	return len(strings.Split(s, " ")) == 1
-}
-
-func hasLessWordsThan(s string, n int) bool {
-	return len(strings.Split(s, " ")) < n
+func numberOfWords(s string) int {
+	return len(strings.Split(s, " "))
 }
 
 func isEmail(s string) bool {
@@ -58,17 +56,11 @@ func isEmpty(s string) bool {
 	return len(s) == 0
 }
 
-func isUpCaseInitial(s string) bool {
-	return s == upcaseInitialAllWords(strings.ToLower(s))
-}
+var capitalizedFullNameRegex, _ =
+	regexp.Compile("^\\p{Lu}\\p{Ll}*((\\s+\\p{Ll}{1,3}){0,2}\\s+(\\p{Lu}{1,2}\\.|\\p{Lu}\\p{Ll}*(-\\p{Lu}\\p{Ll}*)?))*(\\s[IV]+)?$")
 
-func upcaseInitialAllWords(s string) string {
-	words := strings.Split(s, " ")
-	for i, w := range words {
-		words[i] = upcaseInitial(w)
-	}
-
-	return strings.Join(words, " ")
+func isCapitalizedFullName(s string) bool {
+	return capitalizedFullNameRegex.MatchString(s)
 }
 
 func upcaseInitial(str string) string {

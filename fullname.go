@@ -29,7 +29,7 @@ func ScoreFullNames(names []string) map[string]float64 {
 }
 
 func scoreFullname(s string) (score float64) {
-	if !isFullname(s) {
+	if !isFullNameCandidate(s) {
 		score = -1
 		return
 	}
@@ -39,23 +39,37 @@ func scoreFullname(s string) (score float64) {
 		return
 	}
 
-	if !isSingleWord(s) && hasLessWordsThan(s, 4) {
-		score += 1
+	// Add up to 1 point for names up to 4 words. This covers most common
+	// naming conventions, with few exception.
+	//
+	// In our use case, we found ~98.8% users use at most 3 names, and
+	// 99.7% use at most 4.
+	//
+	// At 5 or more words, non full name and weird results would start
+	// being the norm rather than the exception.
+	nWords := numberOfWords(s)
+	if nWords > 1 && nWords <= 4 {
+		score += float64(nWords) / 4.
 	}
 
 	if isLowerCase(s) {
 		score -= .1
 	}
 
-	if isOnlyValidChars(s) {
+	if isWellFormedFullName(s) {
 		score += 1
 	}
 
-	if isUpCaseInitial(s) {
+	if isCapitalizedFullName(s) {
 		score += 1
 	}
 
-	score += float64(len(s)) / 100
+	// Prefer longer names if they are under a sane length limit.
+	// ~99.9% names we found were, at most, 35 long.
+	length := len(s)
+	if length <= 35 {
+		score += float64(length) / 35
+	}
 
 	return
 }
