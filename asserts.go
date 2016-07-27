@@ -18,6 +18,16 @@ func isOnlyValidChars(s string) bool {
 	return govalidator.IsUTFLetter(s)
 }
 
+var titlePrefixes = map[string]interface{}{
+	"Mr":nil, "Ms":nil, "Mrs":nil, "Miss":nil, "Sir":nil, "Lady":nil, "Lord":nil,
+	"Dr":nil, "Prof":nil,
+}
+
+func isTitlePrefix(s string) bool {
+	_, present := titlePrefixes[s]
+	return present
+}
+
 func containsNumbers(s string) bool {
 	for i := 0; i < len(s); i++ {
 		if s[i] >= '0' && s[i] <= '9' {
