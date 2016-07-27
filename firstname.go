@@ -11,7 +11,10 @@ func GetBestFirstname(names []string) string {
 		return ""
 	}
 
-	for _, name := range words {
+	for idx, name := range words {
+		if idx == 0 && isTitlePrefix(name) {
+			continue
+		}
 		if len(name) > 1 {
 			return name
 		}

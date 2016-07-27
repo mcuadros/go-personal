@@ -10,10 +10,14 @@ var firstNameProvider = map[string][]string{
 	"":       []string{"QUX", "Foo"},
 	"Bar":    []string{"Bar Foo", "B�r Foo"},
 	"Qux":    []string{"A. Qux Foo", "B�r Foo"},
+	"Peter":  []string{"Mr. Peter Foo"},
+	"Helen":  []string{"Mrs. Helen Foo"},
+	"Who":    []string{"Dr. Who Foo"},
+	"Whoa":   []string{"Prof Whoa Foo"},
 }
 
 func (s *PersonalSuite) TestGetBestFirstname(c *C) {
 	for best, names := range firstNameProvider {
-		c.Assert(best, Equals, GetBestFirstname(names))
+		c.Assert(GetBestFirstname(names), Equals, best)
 	}
 }
