@@ -22,13 +22,13 @@ func ScoreFullNames(names []string) map[string]float64 {
 	r := make(map[string]float64, 0)
 	for _, name := range names {
 		name = clean(name)
-		r[name] = scoreFullname(name)
+		r[name] = ScoreFullName(name)
 	}
 
 	return r
 }
 
-func scoreFullname(s string) (score float64) {
+func ScoreFullName(s string) (score float64) {
 	if !isFullNameCandidate(s) {
 		score = -1
 		return
