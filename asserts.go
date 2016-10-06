@@ -79,24 +79,24 @@ func splitWords(str string) []string {
 	return strings.Split(str, " ")
 }
 
-var preferredDomains = map[string]float64{
+var preferredDomains = map[string]uint8{
 	"gmail.com":                2,
 	"me.com":                   1,
 	"live.com":                 1,
 	"outlook.com":              1,
 	"mail.ru":                  1,
 	"qq.com":                   1,
-	"hotmail.com":              -1,
-	"users.noreply.github.com": -1,
+	"hotmail.com":              0,
+	"users.noreply.github.com": 0,
 }
 
 func getPreferredDomainScore(email string) float64 {
 	domain := getDomainFromEmail(email)
 	score, preferred := preferredDomains[domain]
 	if !preferred {
-		return 0
+		return 0.5
 	}
-	return score
+	return float64(score)
 }
 
 func isPrimaryDomain(email string) bool {

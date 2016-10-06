@@ -5,12 +5,18 @@ import (
 )
 
 var emailProvider = map[string][]string{
+	// Invalid emails are ignored
 	"foo@bar.com": []string{"foo@bar.com", "foo"},
+	"":            []string{"foo"},
 
 	//We prefer some domains againsts others
 	"foo@gmail.com":  []string{"foo@bar.com", "foo@gmail.com"},
 	"foo2@gmail.com": []string{"foo@live.com", "foo2@gmail.com"},
 	"foo@live.com":   []string{"foo@bar.com", "foo@live.com"},
+
+	"foo@hotmail.com":              []string{"foo@hotmail.com"},
+	"foo@users.noreply.github.com": []string{"foo@users.noreply.github.com"},
+	"foo@mydomain.com":             []string{"foo@mydomain.com", "foo@hotmail.com"},
 
 	//Local domains
 	"foo@baz.com": []string{"foo@bar.(none)", "foo@baz.com"},
