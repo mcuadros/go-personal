@@ -5,15 +5,15 @@ import (
 )
 
 var firstNameProvider = map[string][]string{
-	"Máximo": []string{"mcuadros", "Máximo Cuadros", "Máximo Cuadros Ortiz"},
-	"Foo":    []string{"foo", "foo bar", "foo ba", "Foo Bar"},
-	"":       []string{"QUX", "Foo"},
-	"Bar":    []string{"Bar Foo", "B�r Foo"},
-	"Qux":    []string{"A. Qux Foo", "B�r Foo"},
-	"Peter":  []string{"Mr. Peter Foo"},
-	"Helen":  []string{"Mrs. Helen Foo"},
-	"Who":    []string{"Dr. Who Foo"},
-	"Whoa":   []string{"Prof Whoa Foo"},
+	"Máximo": {"mcuadros", "Máximo Cuadros", "Máximo Cuadros Ortiz"},
+	"Foo":    {"foo", "foo bar", "foo ba", "Foo Bar"},
+	"":       {"QUX", "Foo"},
+	"Bar":    {"Bar Foo", "B�r Foo"},
+	"Qux":    {"A. Qux Foo", "B�r Foo"},
+	"Peter":  {"Mr. Peter Foo"},
+	"Helen":  {"Mrs. Helen Foo"},
+	"Who":    {"Dr. Who Foo"},
+	"Whoa":   {"Prof Whoa Foo"},
 }
 
 func (s *PersonalSuite) TestGetBestFirstname(c *C) {
