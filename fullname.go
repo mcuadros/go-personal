@@ -1,44 +1,23 @@
 package personal
 
 //GetBestFullName returns the best fullname that can be found on the list of
-//strings. Its gives priority to strings with correct capitalize names, only
-//letters strings, longer strings and strings with more than two words and less
+//strings. It gives priority to strings with correctly capitalized names, only
+//letter strings, longer strings and strings with more than two words and less
 //than four.
 func GetBestFullName(names []string) string {
-	var higher float64
-	var best string
-	for name, score := range ScoreFullNames(names) {
-		if score > higher {
-			higher = score
-			best = name
-		}
-	}
-
-	return best
+	return best(ScoreFullNames(names))
 }
 
 //ScoreFullNames returns a map with the fullnames and his score, higher is better
 func ScoreFullNames(names []string) map[string]float64 {
-	r := make(map[string]float64, 0)
-	for _, name := range names {
-		name = clean(name)
-		r[name] = ScoreFullName(name)
-	}
-
-	return r
+	return score(names, ScoreFullName)
 }
 
-func ScoreFullName(s string) (score float64) {
-	if !isFullNameCandidate(s) {
-		score = -1
-		return
+//ScoreFullName returns the full name score for a given string
+func ScoreFullName(s string) float64 {
+	if !isFullNameCandidate(s) || containsNumbers(s) {
+		return -1
 	}
-
-	if containsNumbers(s) {
-		score = -1
-		return
-	}
-
 	// Add up to 1 point for names up to 4 words. This covers most common
 	// naming conventions, with few exception.
 	//
@@ -47,29 +26,47 @@ func ScoreFullName(s string) (score float64) {
 	//
 	// At 5 or more words, non full name and weird results would start
 	// being the norm rather than the exception.
-	nWords := numberOfWords(s)
-	if nWords > 1 && nWords <= 4 {
-		score += float64(nWords) / 4.
+	var score float64
+	if n := numberOfWords(s); n > 1 && n <= 4 {
+		score += float64(n) / 4
 	}
 
 	if isLowerCase(s) {
 		score -= .1
 	}
-
 	if isWellFormedFullName(s) {
-		score += 1
+		score++
 	}
-
 	if isCapitalizedFullName(s) {
-		score += 1
+		score++
 	}
 
 	// Prefer longer names if they are under a sane length limit.
 	// ~99.9% names we found were, at most, 35 long.
-	length := len(s)
-	if length <= 35 {
-		score += float64(length) / 35
+	if l := len(s); l <= 35 {
+		score += float64(l) / 35
 	}
 
-	return
+	return score
+}
+
+type scoreFunc func(string) float64
+
+func score(ls []string, scorer scoreFunc) map[string]float64 {
+	scores := map[string]float64{}
+	for _, s := range ls {
+		scores[s] = scorer(clean(s))
+	}
+	return scores
+}
+
+func best(scores map[string]float64) string {
+	var higher float64
+	var best string
+	for name, score := range scores {
+		if score >= higher {
+			best, higher = name, score
+		}
+	}
+	return best
 }

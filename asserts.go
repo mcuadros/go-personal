@@ -1,11 +1,10 @@
 package personal
 
 import (
+	"regexp"
 	"strings"
-	"unicode"
 
 	"github.com/asaskevich/govalidator"
-	"regexp"
 )
 
 func isFullNameCandidate(s string) bool {
@@ -14,15 +13,15 @@ func isFullNameCandidate(s string) bool {
 
 // Matches valid full names in a lax way
 // (e.g. not considering capitalization).
-var fullNameRegex, _ = regexp.Compile("^\\pL+?(\\s+(\\pL{1,2}\\.|\\pL+(-\\pL+)?))*(\\s[IV]+)?$")
+var fullNameRegex = regexp.MustCompile("^\\pL+?(\\s+(\\pL{1,2}\\.|\\pL+(-\\pL+)?))*(\\s[IV]+)?$")
 
 func isWellFormedFullName(s string) bool {
 	return fullNameRegex.MatchString(s)
 }
 
 var titlePrefixes = map[string]interface{}{
-	"Mr":nil, "Ms":nil, "Mrs":nil, "Miss":nil, "Sir":nil, "Lady":nil, "Lord":nil,
-	"Dr":nil, "Prof":nil,
+	"Mr": nil, "Ms": nil, "Mrs": nil, "Miss": nil, "Sir": nil, "Lady": nil, "Lord": nil,
+	"Dr": nil, "Prof": nil,
 }
 
 func isTitlePrefix(s string) bool {
@@ -41,7 +40,7 @@ func containsNumbers(s string) bool {
 }
 
 func numberOfWords(s string) int {
-	return len(strings.Split(s, " "))
+	return strings.Count(s, " ") + 1
 }
 
 func isEmail(s string) bool {
@@ -56,19 +55,14 @@ func isEmpty(s string) bool {
 	return len(s) == 0
 }
 
-var capitalizedFullNameRegex, _ =
-	regexp.Compile("^\\p{Lu}\\p{Ll}*((\\s+\\p{Ll}{1,3}){0,2}\\s+(\\p{Lu}{1,2}\\.|\\p{Lu}\\p{Ll}*(-\\p{Lu}\\p{Ll}*)?))*(\\s[IV]+)?$")
+var capitalizedFullNameRegex = regexp.MustCompile("^\\p{Lu}\\p{Ll}*((\\s+\\p{Ll}{1,3}){0,2}\\s+(\\p{Lu}{1,2}\\.|\\p{Lu}\\p{Ll}*(-\\p{Lu}\\p{Ll}*)?))*(\\s[IV]+)?$")
 
 func isCapitalizedFullName(s string) bool {
 	return capitalizedFullNameRegex.MatchString(s)
 }
 
 func upcaseInitial(str string) string {
-	for i, v := range str {
-		return string(unicode.ToUpper(v)) + str[i+1:]
-	}
-
-	return ""
+	return strings.Title(str)
 }
 
 func removeDots(str string) string {
@@ -100,15 +94,8 @@ func getPreferredDomainScore(email string) float64 {
 }
 
 func isPrimaryDomain(email string) bool {
-	domain := getDomainFromEmail(email)
-	base := removeTLD(domain)
-
-	parts := strings.Split(base, ".")
-	if len(parts) == 1 {
-		return true
-	}
-
-	return false
+	base := removeTLD(getDomainFromEmail(email))
+	return strings.Count(base, ".") == 0
 }
 
 func removeTLD(domain string) string {
